@@ -1,0 +1,40 @@
+body{
+    background-color:#e3dac9 ;
+    color: white;
+}
+.container{
+    width: 70%;
+    height: 100vh;
+    padding-top: 100px;
+}
+input{
+    width: 50%;
+    height: 35px;
+    text-align: center;
+    font-size: 23px;
+    border-radius: 5px;
+}
+.reset{
+    margin-top: 15px;
+    padding: 5px 30px;
+    border-radius: 4px;
+    font-size: 17px;
+}
+.reset:hover{
+    background-color: white;
+}
+.content{
+    width: 50%;
+    text-align: center;
+    font-size: 23px;
+    border-radius: 5px;
+    margin: auto;
+    margin-bottom: 30px;
+    background-color: #71a6d2;
+    margin-top: 100px;
+}
+.alert{
+    color: #ed2939;
+    font-weight: bold;
+    font-size: 20px;
+}

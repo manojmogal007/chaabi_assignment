@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import '../styles/Typingchallenge.css'
 
 const Typingchallenge = () => {
@@ -32,7 +31,7 @@ const Typingchallenge = () => {
         fontSize:'18px'
     }
     const styled={
-        backgroundColor: 'red',
+        backgroundColor: '#ff7f50',
         color: 'white',
         height:'43px',
         width:'43px',
@@ -40,6 +39,9 @@ const Typingchallenge = () => {
         margin:'15px',
         fontWeight:'bold',
         fontSize:'18px'
+    }
+    const background={
+        backgroundColor:'red'
     }
 
     const generateword=()=>{
@@ -56,6 +58,7 @@ const Typingchallenge = () => {
     }
 
     const handlecontent=(e)=>{
+
         let val=e.target.value
         let track=''
         setCont(val)
@@ -70,7 +73,6 @@ const Typingchallenge = () => {
             track=true
             
         }else if(prevlength===val.length-1){
-            // console.log('incorrect')
             setCheck({...check,incorrect:check.incorrect+1})
             setCount(count+1)
             setPrevcheck({...prevcheck,corr:false,incorr:true})
@@ -105,6 +107,7 @@ const Typingchallenge = () => {
         setPrevcheck({...prevcheck,corr:false,incorr:false});
         setkeypress(0)
         setAlert(false)
+        setSpeed(0)
         generateword()
     }
 
@@ -144,13 +147,14 @@ const Typingchallenge = () => {
       }, [cont, startTime]);
 
   return (
-    <div>
-        <h2>{data===''?'':data}</h2>
-        <input placeholder='Re-Type content here' value={cont} onChange={handlecontent}></input>
+    <div className='conatiner'>
+        <div className='content'><h2>{data===''?'':data}</h2></div>
+        <input  placeholder='Re-Type content here...' value={cont} onChange={handlecontent}></input>
         {/* <button onClick={generateword}>New word</button> */}
-        <button onClick={handlereset}>Reset</button>
-        <p style={{color:'red'}}>{alert?'You entered wrong character':''}</p>
-        <p>Accuracy : {accuracy===''?'0%':`${accuracy}%`}   WPM : {speed}</p>
+        <br/>
+        <button className='reset' onClick={handlereset}>Reset</button>
+        <p className='alert'>{alert?'You entered wrong character!':''}</p>
+        <p style={{color:'black'}}>Accuracy : {accuracy===''?'0%':`${accuracy}%`}   WPM : {speed}</p>
         <div className='keys'>
             <button style={count===0?data[count]==='a'?styled:normal :data[count]==='a'?styled:normal}>a</button>
             <button style={count===0?data[count]==='s'?styled:normal :data[count]==='s'?styled:normal}>s</button>
