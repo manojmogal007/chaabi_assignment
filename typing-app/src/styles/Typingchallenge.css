@@ -38,3 +38,8 @@ input{
     font-weight: bold;
     font-size: 20px;
 }
+.accuracy{
+    color: black;
+    font-weight: 600;
+    font-size: 19px;
+}

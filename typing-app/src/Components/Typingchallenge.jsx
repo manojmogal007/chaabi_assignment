@@ -117,12 +117,12 @@ const Typingchallenge = () => {
             setEndTime(null);
           } else if (startTime === null) {
             setStartTime(Date.now());
-            console.log('clock started')
+            // console.log('clock started')
           } else if (cont === data) {
             let end_time=Date.now()
             // setEndTime(end_time);
 
-            console.log('clock ended',Date.now())
+            // console.log('clock ended',Date.now())
             calculateTimeInSeconds(end_time)
           }
     }
@@ -133,7 +133,7 @@ const Typingchallenge = () => {
           let timetaken= Math.floor((end_time - startTime) / 1000);
           let wpm= Math.floor(60/timetaken)
           setSpeed(wpm)
-          console.log(timetaken)
+        //   console.log(timetaken)
         }
         // return null;
       };
@@ -153,8 +153,8 @@ const Typingchallenge = () => {
         {/* <button onClick={generateword}>New word</button> */}
         <br/>
         <button className='reset' onClick={handlereset}>Reset</button>
-        <p className='alert'>{alert?'You entered wrong character!':''}</p>
-        <p style={{color:'black'}}>Accuracy : {accuracy===''?'0%':`${accuracy}%`}   WPM : {speed}</p>
+        <p className='alert'>{alert?'Oops! That key was incorrect!':''}</p>
+        <p className='accuracy'>Accuracy : {accuracy===''?'0%':`${accuracy}%`}   WPM : {speed}</p>
         <div className='keys'>
             <button style={count===0?data[count]==='a'?styled:normal :data[count]==='a'?styled:normal}>a</button>
             <button style={count===0?data[count]==='s'?styled:normal :data[count]==='s'?styled:normal}>s</button>
