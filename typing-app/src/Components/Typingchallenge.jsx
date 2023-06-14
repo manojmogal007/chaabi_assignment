@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import '../styles/Typingchallenge.css'
 
 const Typingchallenge = () => {
 
@@ -15,15 +16,20 @@ const Typingchallenge = () => {
     const [prevlength,setPrevlength]=useState(0)
     const [prevcheck,setPrevcheck]=useState({corr:false,incorr:false})
     const [keypress,setkeypress]=useState(0)
+    const [startTime, setStartTime] = useState(null);
+    const [endTime, setEndTime] = useState(null);
+    const [speed,setSpeed]=useState(0)
     // console.log(keypress)
     
     const normal={
-        backgroundColor: 'blue',
+        backgroundColor: '#4f86f7',
         color: 'white',
         height:'35px',
         width:'35px',
         borderRadius:'4px',
-        margin:'10px'
+        margin:'10px',
+        fontWeight:'bold',
+        fontSize:'18px'
     }
     const styled={
         backgroundColor: 'red',
@@ -31,7 +37,9 @@ const Typingchallenge = () => {
         height:'43px',
         width:'43px',
         borderRadius:'4px',
-        margin:'10px'
+        margin:'15px',
+        fontWeight:'bold',
+        fontSize:'18px'
     }
 
     const generateword=()=>{
@@ -100,9 +108,40 @@ const Typingchallenge = () => {
         generateword()
     }
 
+    const calculatetime=()=>{
+        if (cont === '') {
+            setStartTime(null);
+            setEndTime(null);
+          } else if (startTime === null) {
+            setStartTime(Date.now());
+            console.log('clock started')
+          } else if (cont === data) {
+            let end_time=Date.now()
+            // setEndTime(end_time);
+
+            console.log('clock ended',Date.now())
+            calculateTimeInSeconds(end_time)
+          }
+    }
+
+    const calculateTimeInSeconds = (end_time) => {
+        // console.log(startTime,endTime)
+        if (startTime !== null && end_time !== null) {
+          let timetaken= Math.floor((end_time - startTime) / 1000);
+          let wpm= Math.floor(60/timetaken)
+          setSpeed(wpm)
+          console.log(timetaken)
+        }
+        // return null;
+      };
+
     useEffect(()=>{
         generateword()
     },[])
+
+    useEffect(() => {
+        calculatetime()
+      }, [cont, startTime]);
 
   return (
     <div>
@@ -111,7 +150,7 @@ const Typingchallenge = () => {
         {/* <button onClick={generateword}>New word</button> */}
         <button onClick={handlereset}>Reset</button>
         <p style={{color:'red'}}>{alert?'You entered wrong character':''}</p>
-        <p>Accuracy : {accuracy===''?'0%':`${accuracy}%`}</p>
+        <p>Accuracy : {accuracy===''?'0%':`${accuracy}%`}   WPM : {speed}</p>
         <div className='keys'>
             <button style={count===0?data[count]==='a'?styled:normal :data[count]==='a'?styled:normal}>a</button>
             <button style={count===0?data[count]==='s'?styled:normal :data[count]==='s'?styled:normal}>s</button>
