@@ -45,7 +45,7 @@ const Typingchallenge = () => {
         borderRadius:'4px',
         margin:'20px',
         fontWeight:'bold',
-        fontSize:'18px'
+        fontSize:'30px'
     }
     const background={
         backgroundColor:'red'
