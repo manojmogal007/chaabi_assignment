@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import '../styles/Typingchallenge.css'
 import backimage from  '../assets/back.png'
+import click from '../assets/click.mp3'
+import clack from '../assets/clack.mp3'
 
 const Typingchallenge = () => {
 
@@ -78,6 +80,7 @@ const Typingchallenge = () => {
             setPrevcheck({...prevcheck,corr:true,incorr:false})
             // setAlert(false)
             track=true
+            new Audio(click).play()
             
         }else if(prevlength===val.length-1){
             setCheck({...check,incorrect:check.incorrect+1})
@@ -86,6 +89,7 @@ const Typingchallenge = () => {
             setAlert(true)
             setWrongcount(wrongcount+1)
             track=false
+            new Audio(clack).play()
         }else{
             // setCount(count-1)
             setAlert(false)
