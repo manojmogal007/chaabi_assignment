@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../styles/Typingchallenge.css'
+import backimage from  '../assets/back.png'
 
 const Typingchallenge = () => {
 
@@ -18,25 +19,31 @@ const Typingchallenge = () => {
     const [startTime, setStartTime] = useState(null);
     const [endTime, setEndTime] = useState(null);
     const [speed,setSpeed]=useState(0)
+    const [seconds, setSeconds] = useState(5 * 60);
+    const [isRunning, setIsRunning] = useState(false);
+    const [wrongcount,setWrongcount]=useState(0)
     // console.log(keypress)
     
     const normal={
-        backgroundColor: '#4f86f7',
+        // backgroundColor: '#4f86f7',
+        backgroundColor: 'transparent',
         color: 'white',
         height:'35px',
         width:'35px',
         borderRadius:'4px',
         margin:'10px',
         fontWeight:'bold',
-        fontSize:'18px'
+        fontSize:'18px',
+        border:'1px solid white'
     }
     const styled={
-        backgroundColor: '#ff7f50',
-        color: 'white',
-        height:'43px',
-        width:'43px',
+        // backgroundColor: '#ff7f50',
+        backgroundColor: 'white',
+        color: 'black',
+        height:'50px',
+        width:'50px',
         borderRadius:'4px',
-        margin:'15px',
+        margin:'20px',
         fontWeight:'bold',
         fontSize:'18px'
     }
@@ -74,13 +81,15 @@ const Typingchallenge = () => {
             
         }else if(prevlength===val.length-1){
             setCheck({...check,incorrect:check.incorrect+1})
-            setCount(count+1)
+            // setCount(count+1)
             setPrevcheck({...prevcheck,corr:false,incorr:true})
             setAlert(true)
+            setWrongcount(wrongcount+1)
             track=false
         }else{
-            setCount(count-1)
+            // setCount(count-1)
             setAlert(false)
+            setWrongcount(wrongcount-1)
             if(prevcheck.corr){
                 setCheck({...check,correct:check.correct-1})
             }
@@ -88,6 +97,10 @@ const Typingchallenge = () => {
             //     setCheck({...check,incorrect:check.incorrect-1})
             // }
         }
+        if(cont===''){
+            handletimer()
+        }
+        
         if(val.length===data.length&&track){
         let measure_accuracy=((data.length-check.incorrect)/data.length)*100
         setAcuuracy(Math.floor(measure_accuracy))
@@ -108,6 +121,9 @@ const Typingchallenge = () => {
         setkeypress(0)
         setAlert(false)
         setSpeed(0)
+        setSeconds(5*60)
+        clearInterval(isRunning)
+        // clearInterval(timer)
         generateword()
     }
 
@@ -117,12 +133,8 @@ const Typingchallenge = () => {
             setEndTime(null);
           } else if (startTime === null) {
             setStartTime(Date.now());
-            // console.log('clock started')
           } else if (cont === data) {
             let end_time=Date.now()
-            // setEndTime(end_time);
-
-            // console.log('clock ended',Date.now())
             calculateTimeInSeconds(end_time)
           }
     }
@@ -135,8 +147,15 @@ const Typingchallenge = () => {
           setSpeed(wpm)
         //   console.log(timetaken)
         }
-        // return null;
       };
+
+      const handletimer=()=>{
+        setIsRunning(setInterval(() => {
+            setSeconds((prevSeconds) => prevSeconds - 1);
+          }, 1000))
+
+          return () => clearInterval(isRunning);
+      }
 
     useEffect(()=>{
         generateword()
@@ -144,17 +163,35 @@ const Typingchallenge = () => {
 
     useEffect(() => {
         calculatetime()
+        // handletimer()
       }, [cont, startTime]);
 
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+
+      const {corr,incorr}=prevcheck
   return (
-    <div className='conatiner'>
+    <div className='main' style={{backgroundImage:`url(${backimage})`}}>
+    <div className='container' >
         <div className='content'><h2>{data===''?'':data}</h2></div>
-        <input  placeholder='Re-Type content here...' value={cont} onChange={handlecontent}></input>
-        {/* <button onClick={generateword}>New word</button> */}
+        <input  placeholder='Re-Type content here...'   value={cont} onChange={handlecontent}></input>
         <br/>
         <button className='reset' onClick={handlereset}>Reset</button>
-        <p className='alert'>{alert?'Oops! That key was incorrect!':''}</p>
-        <p className='accuracy'>Accuracy : {accuracy===''?'0%':`${accuracy}%`}   WPM : {speed}</p>
+        
+            <p className='alert'>{alert?'Oops! That key was incorrect!':''}</p>
+            <p className='nice'>{cont===data&&accuracy===100?"Nice job! Keep it up.":''}</p>
+            <p className='average'>{cont===data&&accuracy<100?"Doing well. Needs more practice":''}</p>
+            <div>
+                {seconds > 0 ? (
+                    <h2 style={minutes<1?{color:'red'}:{color:'green'}}>
+                    {minutes}:{remainingSeconds < 10 ? '0' : ''}
+                    {remainingSeconds} min
+                    </h2>
+                ) : (
+                    <h2 style={{color:'black'}}>Time's up!</h2>
+                )}
+            </div>
+            
         <div className='keys'>
             <button style={count===0?data[count]==='a'?styled:normal :data[count]==='a'?styled:normal}>a</button>
             <button style={count===0?data[count]==='s'?styled:normal :data[count]==='s'?styled:normal}>s</button>
@@ -165,6 +202,12 @@ const Typingchallenge = () => {
             <button style={count===0?data[count]==='l'?styled:normal :data[count]==='l'?styled:normal}>l</button>
             <button style={count===0?data[count]===';'?styled:normal :data[count]===';'?styled:normal}>;</button>
         </div>
+        <div className='result'>
+                <p className='accuracy'>Accuracy : {accuracy===''?'0%':`${accuracy}%`}  </p>
+                <p className='accuracy'>WPM : {speed}</p>
+                <p className='accuracy'>Pressed key count : {keypress}</p>
+        </div>
+    </div>
     </div>
   )
 }
